@@ -4,7 +4,7 @@ module.exports = {
       return [
         {
           source: '/:path*',
-          destination: 'DanielOkada.pythonanywhere.com/:path*', // 実際のプロキシ先のURLに置き換えてください
+          destination: 'http://danielokada.pythonanywhere.com/:path*', // 実際のプロキシ先のURLに置き換えてください
         },
       ];
     },
