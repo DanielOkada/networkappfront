@@ -1,11 +1,12 @@
-import { UploadForm, ShowNetwork, SelectSheet, getSheets } from "./utils"
+// import { MyForm } from "./forms"
+import {MyPage} from "./visualization"
 
 
 export default function Home() {
   return (
-    <>
-      <UploadForm url={"upload"}/>
-      <ShowNetwork/>
-    </>
+    <div>
+      <MyPage/>
+      <a href="fronttest">test</a>
+    </div> 
   )
 }
