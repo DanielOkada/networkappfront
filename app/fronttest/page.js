@@ -5,7 +5,10 @@ import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
+import { useSpring, animated } from '@react-spring/web'
+import { useTrail, animated as a } from "@react-spring/web"
+import { MyTest, Pie, MyTest2 } from './animationTest';
+import Image from 'next/image';
 
 
 
@@ -74,47 +77,43 @@ export function Bar({x="0", y="0", rx="0", ry="0", width="10", height=100, handl
   )
 }
 
+export function AnimationTest(){
+  const [springs, api] = useSpring(() => ({
+    from: { x: 0 },
+  }))
+
+  const handleClick = () => {
+    api.start({
+      from: {
+        x: 0,
+      },
+      to: {
+        x: 100,
+      },
+    })
+  }
+
+  return (
+    <animated.div
+      onClick={handleClick}
+      style={{
+        width: 80,
+        height: 80,
+        background: '#ff6d6d',
+        borderRadius: 8,
+        ...springs,
+      }}
+    />
+  )
+}
+
 
 export default function Hello() {
-    const [open, setOpen] = useState(false);
-    const [contextMenuX, setContextMenuX] = useState(0)
-    const [contextMenuy, setContextMenuY] = useState(0)
-    const [height, setHeight] = useState(100)
-    const [barY, setBarY] = useState(0)
-
-    function handleContextMenu(event){
-      event.preventDefault();
-
-      setContextMenuX(event.clientX);
-      setContextMenuY(event.clientY);
-      setOpen(true);
-    }
-    
-    const handleClose = () => {
-      setOpen(false);
-    };
-
-    function handleContextMenuContextMenu(event){
-      event.preventDefault();
-      handleClose();
-    }
-
-    function onMouseMove(event){
-      let new_height = event.clientY;
-      if ( new_height < 0){
-        new_height = 0;
-      }
-      setHeight(new_height);
-    }
 
     return (
-            <div onMouseMove={onMouseMove}>
-              <ContextMenu open={open} handleClose={handleClose} x={contextMenuX} y={contextMenuy} onContextMenu={handleContextMenuContextMenu}/>
-              <svg viewBox='-50, -50, 500, 500'>
-                <Bar x="0" handleContextMenu={handleContextMenu} height={height}/>
-                <Bar x="11"handleContextMenu={handleContextMenu} height={height/2}/>
-                <Bar x="22"handleContextMenu={handleContextMenu} height={height/4}/>
-              </svg>
+            <div>
+              <Pie/>
+
             </div>
             )
 }
