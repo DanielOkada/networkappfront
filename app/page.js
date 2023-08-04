@@ -1,4 +1,3 @@
-"use client"
 import {MyPage} from "./visualization"
 
 
