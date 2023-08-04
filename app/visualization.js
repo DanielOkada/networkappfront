@@ -5,27 +5,25 @@ import { useState, useEffect, useRef } from 'react';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getSheets, setSheet, getNetwork, getNetworks} from './utils';
+import { getSheets} from './utils';
 import Graph from "react-graph-vis";
 import AddIcon from '@mui/icons-material/Add';
-import { MyGraph, NetworkForm, NetworkFormD3, UploadForm } from './forms';
+import { SelectSheetForm, NetworkFormD3, UploadForm, FileInput } from './forms';
 import { store } from './store'
 import { Provider } from 'react-redux'
 import { useSelector, useDispatch } from 'react-redux'
 import { setTrue } from './slices/boolSlice';
-import { DragSelect } from './utilsComponets/vis-utils';
 import "./fonts.css"
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Slider from '@mui/material/Slider';
-import CytoscapeComponent from 'react-cytoscapejs';
-import cytoscape, { GridLayoutOptions } from 'cytoscape';
-import { D3Network } from './animation';
+import { D3Network, D3NetworkRef } from './animation';
 import { getNetworksD3 } from './utils';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { setData } from './slices/networkDataSlice';
 import { MyMap } from './map';
+import * as d3 from 'd3';
 
 
 
@@ -222,7 +220,7 @@ export default function BasicTabs() {
                                 <Jikeiretsu/>
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                                <MyMap/>
+                                <MapWithNetwork/>
                         </TabPanel>
                 </Box>
         );
@@ -330,72 +328,85 @@ export function DiscreteSlider({data}) {
 }
 
 
-export function MyCytoscapeComponent({elements, layout}){
-        const containerRef = useRef(null);
-        let cyRef = useRef(null);
-        const [graph, setGraph] = useState()
+export function MapWithNetwork() {
+        const chartRef = useRef()
+	const [sheets, setSheets] = useState(null);
+	const [sheetValue, setSheetValue] = useState(0);
+	const [currentData, setCurrentData] = useState(null)
+	const [saidai, setSaidai] = useState(false)
+        const [addressData, setAddressData] = useState()
+	const data = useSelector((state) => state.netWorkData.data)
+	const zoom = 100
 
-        useEffect(() => {
-                // Cytoscape.jsの初期化
-                console.log("changed")
-                cyRef.current = cytoscape({
-                        container: containerRef.current,
-                        // elements: CytoscapeComponent.normalizeElements(elements),
-                        style: [
-                                {
-                                selector: 'node',
-                                style: {
-                                'background-color': '#ff0000',
-                                'label': 'data(id)'
-                                }
-                                },
-                                {
-                                selector: 'edge',
-                                style: {
-                                'width': 3,
-                                'line-color': '#0000ff'
-                                }
-                                }
-                        ],
-                        layout: {name: "cose"}
-                });
+	const handleSheetChange = ({ target }) => {
+		setSheetValue(target.value);
+	}
 
-                // コンポーネントがアンマウントされる際にCytoscape.jsのインスタンスを破棄する
-                return () => {
-                        if (cyRef.current) {
-                                cyRef.current.destroy();
-                                cyRef.current = null;
+	function handleSaidaiCheck(event, newValue) {
+		setSaidai(newValue)
+	}
+
+        function setAddressDataAndConvert(file){
+                const reader = new FileReader()
+                reader.readAsText(file, 'utf-8');
+
+                reader.onload = () => {
+                        try {
+                          const data = JSON.parse(reader.result);
+                          setAddressData(data);
+                        } catch (error) {
+                          console.error('Error parsing JSON file:', error);
                         }
-                        };
-        }, []);
+                      }
+        }
 
-        useEffect(() => {
-                const new_elements_collection = cyRef.current.collection(CytoscapeComponent.normalizeElements(elements), { removed: true })
-                const dif = new_elements_collection.difference(cyRef.current.elements())
-                console.log(dif)
-                cyRef.current.add(dif)
+	useEffect( () => {
+		if (!data) {return}
+		setSheets(Object.keys(data.payload))
+	}, [data])
 
-                // dif.layout({name: "random"}).run()
-                
-                // cyRef.current.layout({name:"cose"}).run()
-                console.log("graph_changed")
-        }, [elements])
+	useEffect( () => {
+		if (!(data && sheets)) {return}
 
-        useEffect(() => {
-                const layout1 = { name: 'random' };
-                const layout2 = { name: 'grid' };
-                const layout3 = { name: 'circle' };
-                const layout4 = { name: 'concentric' };
-                const layout5 = { name: 'breadthfirst' };
-                const layout6 = { name: 'cose' };  
-                const layouts = [layout1, layout2, layout3, layout4, layout5, layout6]
-                
-                // cyRef.current.layout(layouts[layout]).run()
+		const sheet = sheets[sheetValue]
+		if (saidai){
+			getSaidai(data.payload[sheet], (d) => setCurrentData(d))
+			return
+		}
 
-                console.log("layout_changed", layouts[layout])
-        }, [layout])
+		setCurrentData(data.payload[sheet])
+	}, [data, sheetValue, sheets, saidai])
 
-        return <div ref={containerRef} style={{ height: '400px', width: "800px" }}></div>
+        useEffect( () => {
+                console.log(addressData)
+	}, [addressData])
+
+        let overlayNetwork = null
+        if (currentData && sheets){
+                overlayNetwork = <D3NetworkRef data={currentData} chartRef={chartRef} width={"100%"} height={"100%"} zoom={zoom/100} />
+        }
+
+        const mysvg = <svg>
+                        <rect x="0" y="0" width="100%" height="100%" fill="blue" />
+                        <circle r="5" cx="10" cy="10" fill="red" />
+                        <text x="50%" y="50%" stroke="white">
+                                text
+                        </text>
+                </svg>
+
+
+	return (
+		<div>
+		<Box sx={{ marginTop: 0 }}>
+			{sheets && <SelectSheetForm sheets={sheets} value={sheetValue} handleChange={handleSheetChange} />}
+                        <FileInput setSelectedFile={setAddressDataAndConvert}/>
+		</Box>
+		<div><FormControlLabel control={<Checkbox onChange={handleSaidaiCheck}/>} label="最大連結成分" /></div>
+		<Box>
+                        <MyMap overlaySVG={overlayNetwork} chartRef={chartRef} addressData={addressData}/>
+		</Box>
+		</div>
+	)
 }
 
 

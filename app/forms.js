@@ -12,15 +12,12 @@ import CheckIcon from '@mui/icons-material/Check';
 import UploadIcon from '@mui/icons-material/Upload';
 import { getSheets, setSheet, getNetwork, getSaidai } from './utils';
 import Graph from "react-graph-vis";
-import OutlinedInput from '@mui/material/OutlinedInput';
 import { TextField } from '@mui/material';
 import { store } from './store'
 import { Provider } from 'react-redux'
 import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment, incrementByAmount } from './slices/counterSlice'
 import { setTrue } from './slices/boolSlice';
 import { sheetSelectedTrue } from './slices/sheetSelectedSlice';
-import CytoscapeComponent from 'react-cytoscapejs';
 import { D3Network } from './animation';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
