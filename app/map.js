@@ -4,6 +4,7 @@ import { useRef, useEffect } from 'react';
 
 export function MyMap({overlaySVG, chartRef, addressData}){
         const mapRef = useRef()
+        const svgRef = useRef(null);
 
         const position = [36.695920313285434, 137.2202906855646]
 
@@ -52,6 +53,20 @@ export function MyMap({overlaySVG, chartRef, addressData}){
                 
         }, [addressData, chartRef])
 
+        useEffect(() => {
+                if (mapRef.current) {
+
+                  // d3でSVGを描画
+                  const svg = d3.select(svgRef.current);
+                  svg
+                    .append('circle')
+                    .attr('cx', 100)
+                    .attr('cy', 100)
+                    .attr('r', 50)
+                    .attr('fill', 'blue');
+                }
+              }, []);
+
         return (
                 <MapContainer center={position} zoom={10} scrollWheelZoom={true} style={{height:500}} ref={mapRef}>
                         <TileLayer
@@ -61,6 +76,13 @@ export function MyMap({overlaySVG, chartRef, addressData}){
                         <SVGOverlay bounds={bounds} >
                                 {overlaySVG}
                         </SVGOverlay>
+                        {/* <svg
+                                ref={svgRef}
+                                style={{
+                                position: 'absolute',
+                                zIndex: 1000, // 地図よりも手前に表示
+                                }}
+                         /> */}
                 </MapContainer>
         )
 }
