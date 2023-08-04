@@ -1,9 +1,10 @@
 "use client"
-import { MapContainer, TileLayer, SVGOverlay} from 'react-leaflet'
+import { MapContainer, TileLayer, SVGOverlay, Pane} from 'react-leaflet'
 import * as d3 from 'd3';
 import { useRef, useEffect } from 'react';
 
-export function MyMap({overlaySVG, chartRef, addressData}){
+
+const MyMap = ({overlaySVG, chartRef, addressData}) => {
         const mapRef = useRef()
         const svgRef = useRef(null);
 
@@ -16,7 +17,7 @@ export function MyMap({overlaySVG, chartRef, addressData}){
 
 
         useEffect( () => {
-                if(!addressData){return}
+                if(!addressData || !chartRef.current){return}
 
                 const map = mapRef.current
                 console.log(map)
@@ -50,40 +51,56 @@ export function MyMap({overlaySVG, chartRef, addressData}){
                                         .attr("x2", d => LinelatLngToLayerPoint(d.target).x )
                                         .attr("y2", d => LinelatLngToLayerPoint(d.target).y )
 
-                // console.log(d3.select(chartRef.current).selectAll("line"))
+                d3.select(chartRef.current).attr({width:960,height:500})
+
+                console.log(d3.select(chartRef.current).selectAll("line"))
                 
         }, [addressData, chartRef])
 
-        useEffect(() => {
-                if (mapRef.current) {
+        // useEffect(() => {
+        //         if (mapRef.current) {
 
-                  // d3でSVGを描画
-                  const svg = d3.select(svgRef.current);
-                  svg
-                    .append('circle')
-                    .attr('cx', 100)
-                    .attr('cy', 100)
-                    .attr('r', 50)
-                    .attr('fill', 'blue');
-                }
-              }, []);
+        //           // d3でSVGを描画
+        //           const svg = d3.select(chartRef.current)
+        //           svg
+        //             .append('circle')
+        //             .attr('cx', 100)
+        //             .attr('cy', 100)
+        //             .attr('r', 50)
+        //             .attr('fill', 'blue');
+        //             console.log(chartRef.current)
+        //         }
 
+        //         console.log(chartRef.current)
+                   
+        //       }, [chartRef.current]);
+
+                const mysvg = <svg style={{position: 'relative',zIndex:1000, width:"100%", height:"100%"}}><circle r={6} cx={"50%"} cy={250} ></circle></svg>
         return (
-                <MapContainer center={position} zoom={10} scrollWheelZoom={true} style={{height:500}} ref={mapRef}>
-                        <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <SVGOverlay bounds={bounds} >
+                <div id="map">
+                        <MapContainer center={position} zoom={10} zoomControl={false} style={{height:500}} ref={mapRef}>
+                                {/* <svg
+                                        ref={chartRef}
+                                        style={{
+                                        position: 'relative', width:"100%", height:"100%",
+                                        zIndex: 1000, // 地図よりも手前に表示
+                                        }}
+                                /> */}
+                                
+                                <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                />
+                                {/* <SVGOverlay bounds={bounds} >
+                                        {overlaySVG}
+                                </SVGOverlay> */}
+
                                 {overlaySVG}
-                        </SVGOverlay>
-                        {/* <svg
-                                ref={svgRef}
-                                style={{
-                                position: 'absolute',
-                                zIndex: 1000, // 地図よりも手前に表示
-                                }}
-                         /> */}
-                </MapContainer>
+
+
+                        </MapContainer>
+                </div>
         )
 }
+
+export default MyMap;

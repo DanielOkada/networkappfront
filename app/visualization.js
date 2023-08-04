@@ -1,7 +1,7 @@
 "use client"
 import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -22,8 +22,8 @@ import { getNetworksD3 } from './utils';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { setData } from './slices/networkDataSlice';
-import { MyMap } from './map';
 import * as d3 from 'd3';
+import dynamic from 'next/dynamic'
 
 
 
@@ -382,7 +382,7 @@ export function MapWithNetwork() {
 	}, [addressData])
 
         let overlayNetwork = null
-        if (currentData && sheets){
+        if (currentData){
                 overlayNetwork = <D3NetworkRef data={currentData} chartRef={chartRef} width={"100%"} height={"100%"} zoom={zoom/100} />
         }
 
@@ -394,6 +394,15 @@ export function MapWithNetwork() {
                         </text>
                 </svg>
 
+        const Map = useMemo(
+                () =>
+                  dynamic(() => import('./map'), {
+                    loading: () => <p>map loading</p>,
+                    ssr: false
+                  }),
+                []
+              );
+
 
 	return (
 		<div>
@@ -403,7 +412,7 @@ export function MapWithNetwork() {
 		</Box>
 		<div><FormControlLabel control={<Checkbox onChange={handleSaidaiCheck}/>} label="最大連結成分" /></div>
 		<Box>
-                        <MyMap overlaySVG={overlayNetwork} chartRef={chartRef} addressData={addressData}/>
+                        <Map overlaySVG={overlayNetwork} chartRef={chartRef} addressData={addressData} />
 		</Box>
 		</div>
 	)

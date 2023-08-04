@@ -166,7 +166,7 @@ export function D3NetworkRef(props){
                 svg.current = d3.select(chartRef.current)
                                 .attr('width', props.width)
                                 .attr('height', props.height)
-                                .attr("viewBox", [-1000 / 2, -1000 / 2, 1000, 1000])
+                                .attr("viewBox", [0, 0, 1000, 500])
         
                 link.current = svg.current.append("g")
                                 .attr("stroke", "#999")
@@ -199,7 +199,7 @@ export function D3NetworkRef(props){
         useEffect( () => {
                 console.log(props.zoom)
                 const zoom = 1000 / props.zoom
-                svg.current.attr("viewBox", [-zoom / 2, -zoom / 2, zoom, zoom])
+                svg.current.attr("viewBox", [0, 0, zoom, 500])
                 
         }, [props.zoom])
 
@@ -273,6 +273,6 @@ export function D3NetworkRef(props){
 
 
         return (
-                <svg ref={chartRef}></svg>
+                <svg ref={chartRef} style={{ position: 'relative', width:"100%", height:"100%", zIndex:1000}}></svg>
         )
 }

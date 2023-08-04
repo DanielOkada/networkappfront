@@ -1,3 +1,4 @@
+"use client"
 export async function getNetwork(){
     const res = await fetch("get_network");
     const data = await res.json();

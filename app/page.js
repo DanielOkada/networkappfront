@@ -1,4 +1,4 @@
-// import { MyForm } from "./forms"
+"use client"
 import {MyPage} from "./visualization"
 
 

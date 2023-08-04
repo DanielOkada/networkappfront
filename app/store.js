@@ -1,3 +1,4 @@
+"use client"
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './slices/counterSlice'
 import boolReducer from './slices/boolSlice'
