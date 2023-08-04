@@ -403,7 +403,7 @@ export function MapWithNetwork() {
 		</Box>
 		<div><FormControlLabel control={<Checkbox onChange={handleSaidaiCheck}/>} label="最大連結成分" /></div>
 		<Box>
-                        {/* <MyMap overlaySVG={overlayNetwork} chartRef={chartRef} addressData={addressData}/> */}
+                        <MyMap overlaySVG={overlayNetwork} chartRef={chartRef} addressData={addressData}/>
 		</Box>
 		</div>
 	)
