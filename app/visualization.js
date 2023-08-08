@@ -86,79 +86,6 @@ export function CanvasManager({children}){
         )
 }
 
-export function DemoNetwork(){
-        const nodes = [
-                { id: 0, label: "", group: 1 },
-                { id: 1, label: "", group: 1 },
-                { id: 2, label: "", group: 1 },
-                { id: 3, label: "", group: 1 },
-                { id: 4, label: "", group: 3 },
-                { id: 5, label: "", group: 2 },
-                { id: 6, label: "", group: 2 },
-                { id: 7, label: "", group: 2 },
-                { id: 8, label: "", group: 2 },
-                { id: 9, label: "", group: 2 },
-                { id: 10, label: "", group: 3 },
-                { id: 11, label: "", group: 3 },
-                { id: 12, label: "", group: 3 },
-        ]
-
-        const edges = [
-                { from: 1, to: 0 },
-                { from: 2, to: 0 },
-                { from: 3, to: 0 },
-                { from: 4, to: 1 },
-                { from: 5, to: 2 },
-                { from: 5, to: 6 },
-                { from: 5, to: 7 },
-                { from: 5, to: 8 },
-                { from: 5, to: 9 },
-                { from: 4, to: 10 },
-                { from: 4, to: 11 },
-                { from: 4, to: 12 },
-        ]
-
-
-        const data = {
-                nodes: nodes,
-                edges: edges,
-        }
-
-        const options = {
-                nodes: {
-                  shape: "dot",
-                  size: 16,
-                },
-                edges: {
-                        arrows: {
-                          to: { enabled: false}
-                        }
-                },
-                // physics: {
-                //   forceAtlas2Based: {
-                //     gravitationalConstant: -26,
-                //     centralGravity: 0.005,
-                //     springLength: 230,
-                //     springConstant: 0.18,
-                //   },
-                //   maxVelocity: 146,
-                //   solver: "forceAtlas2Based",
-                //   timestep: 0.35,
-                //   stabilization: { iterations: 150 },
-                // },
-
-                height: 700,
-                width: 700
-              }
-
-        const events = {
-                select: function(event) {
-                var { nodes, edges } = event;
-                }}
-
-
-        return <Graph graph={data} options={options} events={events}/>
-}
 
 function TabPanel(props) {
         const { children, value, index, ...other } = props;
@@ -228,9 +155,9 @@ export default function BasicTabs() {
 
 
 export function DiscreteSlider({data}) {
+        const graph = useSelector((state) => state.netWorkData.data)
         const [value, setValue] = useState(0);
         const [intervalID, setIntervalID] = useState()
-        const [graph, setGraph] = useState()
         const [originalGraph, setOriginalGraph] = useState()
         const [zoom, setZoom] = useState(100)
             
@@ -276,16 +203,6 @@ export function DiscreteSlider({data}) {
                 setGraph(new_graph)
         }
 
-
-        useEffect(  () => {
-                async function fetchData(){
-                        const _data = await getNetworksD3()
-                        console.log(_data)
-                        setGraph(_data)
-                }
-                fetchData()
-        }, [])
-
         const buttonText = () => {
                 if (intervalID){return "STOP"}
                 return "START"
@@ -311,7 +228,7 @@ export function DiscreteSlider({data}) {
                         <div><FormControlLabel control={<Checkbox onChange={handleSaidaiCheck}/>} label="最大連結成分" /></div>
                 </Box>
                 {!graph && <CircularProgress sx={{position:"relative", display: "block", marginLeft: "auto", marginRight: "auto", top: 100}}/>}
-                {graph && <D3Network data={graph} time={data[value]} width={"100%"} height={700} zoom={zoom/100} />}
+                {graph && <D3Network data={graph.payload[data[value]]} width={"100%"} height={700} zoom={zoom/100} />}
                 <Slider
                                 defaultValue={100}
                                 valueLabelFormat={(x) => x + "%"}
