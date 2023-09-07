@@ -69,7 +69,6 @@ export function D3Network(props){
 
         useEffect( () => {
                 const data = props.data
-                console.log(data)
                 update(data.nodes, data.links)
 
                 function update(nodes, links){
