@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { FileInput, UploadButton } from '../components/forms';
 
 
-export default function UploadForm({ onUploaded, isLoading=false, isUploaded=false }) {
+export default function UploadForm({ onUploaded, isUploaded=false }) {
 	const [selectedFile, setSelectedFile] = useState()
+	const [isLoading, setLoading] = useState(false)
 
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
+		setLoading(true)
 
 		onUploaded(selectedFile)
 	};

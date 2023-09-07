@@ -10,10 +10,13 @@ import { setData } from './slices/networkDataSlice';
 import CanvasManager from './components/CanvasManager';
 import BasicTabs from './components/BasicTabs';
 import { getNetworkData } from "./api/network_data"
+import { useState } from "react";
 
 
 
 export function Main(){
+        const [isUploaded, setUploaded] = useState(false)
+
         const dispatch = useDispatch()
 
         const onUploaded = async (file) => {
@@ -21,7 +24,7 @@ export function Main(){
 
                 const network_data = await getNetworkData(file)
                 dispatch(setData(network_data))
-                
+                setUploaded(true)
         }
 
         
@@ -45,7 +48,7 @@ export function Main(){
                         <Title/>
                         <Box sx={{textAlign: "center", position:"relative", top:50}}>
                                 <Box sx={{marginBottom:5}}>
-                                        <UploadForm onUploaded={onUploaded}/>
+                                        <UploadForm onUploaded={onUploaded} isUploaded={isUploaded} />
                                 </Box>
                                 <CanvasManager> 
                                         <BasicTabs/>
