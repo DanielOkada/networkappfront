@@ -15,7 +15,6 @@
     "@mui/material": "^5.13.4",
     "@react-spring/web": "^9.7.2",
     "@reduxjs/toolkit": "^1.9.5",
-    "cytoscape": "^3.25.0",
     "d3": "^7.8.5",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
@@ -24,12 +23,10 @@
     "react-content-loader": "^6.2.1",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "18.2.0",
-    "react-graph-vis": "^1.0.7",
     "react-hook-form": "^7.44.3",
     "react-leaflet": "^4.2.1",
     "react-redux": "^8.1.0",
-    "styled-components": "^6.0.0-rc.3",
-    "vis-network": "^9.1.6"
+    "styled-components": "^6.0.0-rc.3"
   },
   "devDependencies": {
     "@types/d3": "^7.4.0",

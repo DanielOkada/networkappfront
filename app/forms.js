@@ -11,14 +11,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CheckIcon from '@mui/icons-material/Check';
 import UploadIcon from '@mui/icons-material/Upload';
 import { getSheets, setSheet, getNetwork, getSaidai } from './utils';
-import Graph from "react-graph-vis";
 import { TextField } from '@mui/material';
-import { store } from './store'
-import { Provider } from 'react-redux'
 import { useSelector, useDispatch } from 'react-redux'
-import { setTrue } from './slices/boolSlice';
 import { sheetSelectedTrue } from './slices/sheetSelectedSlice';
-import { D3Network } from './animation';
+import { D3Network } from './network_components/network_vis';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
