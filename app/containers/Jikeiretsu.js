@@ -6,10 +6,11 @@ import JikeiretsuComponent from '../network_components/JikeiretsuComponent';
 export default function Jikeiretsu(){
         const [value, setValue] = useState(0);
         const [intervalID, setIntervalID] = useState();
-        const [graph, setGraph] = useState();
-        const [originalGraph, setOriginalGraph] = useState();
-        const [zoom, setZoom] = useState(100);
-        const network_data = useSelector((state) => state.netWorkData.data.payload)
+
+        const state_network_data = useSelector((state) => state.netWorkData.data)
+        if (!state_network_data) {return}
+
+        const network_data = state_network_data.payload
         const sheets = getSheets(network_data)
 
         const handleChangeSlider = (event, newValue) => {
