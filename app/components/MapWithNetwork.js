@@ -1,7 +1,7 @@
 "use client";
 import { Box } from '@mui/material';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { SelectSheetForm, FileInput } from '../forms';
+import { SelectSheetForm, FileInput } from './forms';
 import { useSelector } from 'react-redux';
 import { D3NetworkRef } from '../network_components/network_vis';
 import Checkbox from '@mui/material/Checkbox';

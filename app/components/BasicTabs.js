@@ -1,38 +1,21 @@
 "use client";
 import { Box } from '@mui/material';
 import { useState } from 'react';
-import { getSheets } from '../api/utils';
-import { NetworkFormD3 } from '../forms';
+import { NetworkFormD3 } from './forms';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabPanel from './TabPanel';
-import DiscreteSlider from "./DiscreteSlider"
 import MapWithNetwork from "./MapWithNetwork";
+import Jikeiretsu from "../containers/Jikeiretsu"
 
 
 
 
 export default function BasicTabs() {
-        const [sheets, setSheets] = useState(null);
         const [value, setValue] = useState(0);
 
         const handleChange = (event, newValue) => {
                 setValue(newValue);
-        };
-
-        const sheets_getter = async () => {
-                await getSheets().then((data) => {
-                        console.log(data);
-                        setSheets(data);
-                });
-        };
-
-        const Jikeiretsu = () => {
-                if (!sheets) {
-                        sheets_getter();
-                        return;
-                }
-                return <DiscreteSlider data={sheets} />;
         };
 
         return (

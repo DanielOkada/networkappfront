@@ -10,11 +10,11 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckIcon from '@mui/icons-material/Check';
 import UploadIcon from '@mui/icons-material/Upload';
-import { getSheets, setSheet, getNetwork, getSaidai } from './api/utils';
+import { getSheets, setSheet, getNetwork, getSaidai } from '../api/utils';
 import { TextField } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux'
-import { sheetSelectedTrue } from './slices/sheetSelectedSlice';
-import { D3Network } from './network_components/network_vis';
+import { sheetSelectedTrue } from '../slices/sheetSelectedSlice';
+import { D3Network } from '../network_components/network_vis';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -39,53 +39,6 @@ export function SelectSheetForm({ sheets, value, handleChange }) {
 	</FormControl>
   )
 }
-
-export function UploadForm({ url, onUploaded }) {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-
-  const handleSubmit = (event) => {
-	event.preventDefault();
-
-	if (selectedFile) {
-	  setLoading(true);
-
-	  // ファイルを送信する処理
-	  const formData = new FormData();
-	  formData.append('file', selectedFile);
-
-	  fetch(url, {
-		method: 'POST',
-		body: formData,
-	  })
-		.then((response) => response.json())
-		.then((data) => {
-		  // ファイルのアップロードが完了した後の処理
-		  // setUploaded(true)
-		  console.log('File uploaded:', data);
-		  setLoading(false)
-		  setSuccess(true)
-		  onUploaded()
-		})
-		.catch((error) => {
-			console.error('File upload error:', error);
-		})
-
-	}
-  };
-
-  return (
-	<div>
-	  <form onSubmit={handleSubmit}>
-		<FileInput setSelectedFile={setSelectedFile} />
-		<UploadButton type="submit" loading={loading} success={success} />
-	  </form>
-	</div>
-  );
-}
-
 
 export function UploadButton({ loading, success }) {
   const MyButton = () => {

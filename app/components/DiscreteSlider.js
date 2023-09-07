@@ -12,7 +12,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 
-export default function DiscreteSlider({ data }) {
+export default function DiscreteSlider({ data, network_data }) {
         const [value, setValue] = useState(0);
         const [intervalID, setIntervalID] = useState();
         const [graph, setGraph] = useState();
@@ -63,13 +63,9 @@ export default function DiscreteSlider({ data }) {
 
 
         useEffect(() => {
-                async function fetchData() {
-                        const _data = await getNetworksD3();
-                        console.log(_data);
-                        setGraph(_data);
-                }
-                fetchData();
-        }, []);
+                if (!network_data) { return }
+                setGraph(network_data);
+        }, [network_data]);
 
         const buttonText = () => {
                 if (intervalID) { return "STOP"; }
@@ -95,7 +91,7 @@ export default function DiscreteSlider({ data }) {
                                 <div><FormControlLabel control={<Checkbox onChange={handleSaidaiCheck} />} label="最大連結成分" /></div>
                         </Box>
                         {!graph && <CircularProgress sx={{ position: "relative", display: "block", marginLeft: "auto", marginRight: "auto", top: 100 }} />}
-                        {graph && <D3Network data={graph} time={data[value]} width={"100%"} height={700} zoom={zoom / 100} />}
+                        {graph && <D3Network data={graph[data[value]]} time={data[value]} width={"100%"} height={700} zoom={zoom / 100} />}
                         <Slider
                                 defaultValue={100}
                                 valueLabelFormat={(x) => x + "%"}
