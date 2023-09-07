@@ -10,14 +10,12 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckIcon from '@mui/icons-material/Check';
 import UploadIcon from '@mui/icons-material/Upload';
-import { getSheets, setSheet, getNetwork, getSaidai } from '../api/utils';
+import { getSaidai } from '../api/utils';
 import { TextField } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux'
-import { sheetSelectedTrue } from '../slices/sheetSelectedSlice';
+import { useSelector } from 'react-redux'
 import { D3Network } from '../network_components/network_vis';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 
 
 export function SelectSheetForm({ sheets, value, handleChange }) {
@@ -110,124 +108,6 @@ export function FileInput({ setSelectedFile }) {
 		}}></TextField>
 	  <input ref={inputRef} hidden type="file" onChange={handleFileChange} />
 	</>
-  )
-}
-
-
-export function SheetForm() {
-  const completed = useSelector((state) => state.completed.value)
-  const dispatch = useDispatch()
-
-  const [sheets, setSheets] = useState(null);
-  const [sheetValue, setSheetValue] = useState("");
-
-  if (!completed) {
-	return
-  }
-
-  const sheets_getter = async () => {
-	await getSheets().then((data) => {
-	  console.log(data)
-	  setSheets(data)
-	});
-  }
-
-  if (!sheets) {
-	sheets_getter()
-	return <div></div>
-  }
-
-  function handleSheetChange({ target }) {
-	console.log(target.value);
-	setSheetValue(target.value);
-	setSheet(sheets[target.value]);
-
-	dispatch(sheetSelectedTrue())
-  }
-
-  return <SelectSheetForm sheets={sheets} value={sheetValue} handleChange={handleSheetChange} />
-}
-
-
-export function MyGraph({ graph, options, events }) {
-  options["height"] = "700"
-  options["width"] = "100%"
-  options["autoResize"] = true
-  options["edges"] = {
-	color: "#22259F",
-	arrows: {
-	  to: { enabled: false }
-	},
-	width: 5
-  }
-
-  return (
-	<Graph graph={graph} options={options} events={events} />
-  )
-}
-
-
-export function NetworkForm() {
-  const [graph, setGraph] = useState();
-  const [loading, setLoading] = useState();
-  const sheetSelected = useSelector((state) => state.sheetSelected.value)
-
-
-  async function handleNetworkDrawClick() {
-	setLoading(<CircularProgress />);
-	const data = await getNetwork();
-	console.log(data);
-
-	const group1 = "會社名"
-	const group2 = "役員名"
-
-	function configureNode(node) {
-	  if (node["group"] == group1) {
-		node["color"] = "#FF5126"
-		node["shape"] = "box"
-	  }
-
-	  if (node["group"] == group2) {
-		node["color"] = "#26A7FF"
-		node["shape"] = "ellipse"
-	  }
-
-	  return node
-	}
-
-	const _graph = {
-	  nodes: data.nodes.map(configureNode),
-	  edges: data.edges
-	};
-
-	const options = {
-	  layout: {
-		hierarchical: false,
-		improvedLayout: false,
-	  },
-	};
-
-	const events = {
-	  select: function (event) {
-		var { nodes, edges } = event;
-	  }
-	};
-
-	setGraph(<MyGraph graph={_graph} options={options} events={events} />);
-	setLoading(null);
-  }
-
-  return (
-	<div>
-	  <Box sx={{ marginTop: 0 }}>
-		<SheetForm />
-		<Button variant="contained" onClick={handleNetworkDrawClick} disabled={!sheetSelected} style={{ margin: 15 }}>ネットワーク描画</Button>
-	  </Box>
-	  <Box>
-		{loading}
-		{graph}
-	  </Box>
-	</div>
   )
 }
 
