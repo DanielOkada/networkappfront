@@ -78,7 +78,7 @@ export default function MapWithNetwork() {
         </svg>;
 
         const Map = useMemo(
-                () => dynamic(() => import('../map'), {
+                () => dynamic(() => import('./map'), {
                         loading: () => <p>map loading</p>,
                         ssr: false
                 }),

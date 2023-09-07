@@ -6,7 +6,7 @@ import { store } from './store'
 import { Provider } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { setTrue } from './slices/boolSlice';
-import { getNetworksD3 } from './utils';
+import { getNetworksD3 } from './api/utils';
 import { setData } from './slices/networkDataSlice';
 import CanvasManager from './components/CanvasManager';
 import BasicTabs from './components/BasicTabs';
@@ -66,6 +66,7 @@ export default function NetworkAppMain(){
                         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
                                 integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
                                 crossOrigin=""/>
+                                
                         <a href="fronttest">test</a>
                         <Main/>
                 </Provider> 

@@ -58,3 +58,18 @@ export async function getSaidai(data, callback){
       console.error('saidai error:', error);
     });
 }
+
+export async function fetcher( resource, init ) {
+    const res = await fetch(resource, init)
+
+    if (!res.ok) {
+        const errorRes = await res.json()
+        const error = new Error(
+          errorRes.message ?? 'APIリクエスト中にエラーが発生しました',
+        )
+    
+        throw error
+      }
+    
+    return res.json()
+}

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Slider from '@mui/material/Slider';
 import { D3Network } from '../network_components/network_vis';
-import { getNetworksD3 } from '../utils';
+import { getNetworksD3 } from '../api/utils';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
